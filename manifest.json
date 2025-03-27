@@ -9,7 +9,7 @@
     ],
     "content_scripts": [
       {
-        "matches": ["https://salad.com/earn/summary*"],
+        "matches": ["https://salad.com/earn*"],
         "js": ["content.js"]
       }
     ],

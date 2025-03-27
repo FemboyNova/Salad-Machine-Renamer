@@ -4,31 +4,44 @@ function replaceMachineNames() {
       
       if (machineNames.length > 0) {
         const machineIdSelectors = [
-          '.css-15d7bl7.ei767vo0',  // Summary page machine ID
-          '.css-cke5iv.ei767vo0',   // Checkbox area machine ID
-          '.c0196',                 // Detailed earnings table machine ID
+            '.css-15d7bl7.ei767vo0',  // Summary page machine ID
+            '.css-cke5iv.ei767vo0',   // Checkbox area machine ID
+            '.c0196',                 // Detailed earnings table machine ID
+            'div[data-testid="machine-id"]' // Generic fallback selector
+          ];
+  
+        const processElements = () => {
+          machineIdSelectors.forEach(selector => {
+            const elements = document.querySelectorAll(selector);
+            
+            elements.forEach(element => {
+              if (element.getAttribute('data-custom-name') === 'true') return;
+  
+              const originalMachineId = element.textContent.trim();
+              
+              const matchingMachine = machineNames.find(machine => 
+                machine.machineId.toLowerCase() === originalMachineId.toLowerCase()
+              );
+              
+              if (matchingMachine) {
+                element.textContent = matchingMachine.customName;
+                element.setAttribute('data-custom-name', 'true');
+              }
+            });
+          });
+        };
+  
+        processElements();
+        
+        const delayedAttempts = [
+          500,
+          1500,
+          3000,
+          5000
         ];
   
-        // Combine all selectors
-        const allMachineIdElements = [];
-        machineIdSelectors.forEach(selector => {
-          allMachineIdElements.push(...document.querySelectorAll(selector));
-        });
-        
-        allMachineIdElements.forEach(element => {
-          if (element.getAttribute('data-custom-name') === 'true') return;
-  
-          const originalMachineId = element.textContent.trim();
-          
-
-          const matchingMachine = machineNames.find(machine => 
-            machine.machineId.toLowerCase() === originalMachineId.toLowerCase()
-          );
-          
-          if (matchingMachine) {
-            element.textContent = matchingMachine.customName;
-            element.setAttribute('data-custom-name', 'true');
-          }
+        delayedAttempts.forEach(delay => {
+          setTimeout(processElements, delay);
         });
       }
     });
@@ -39,28 +52,33 @@ function replaceMachineNames() {
   
     const config = { 
       childList: true, 
-      subtree: true 
+      subtree: true,
+      characterData: true
     };
   
     const callback = function(mutationsList, observer) {
       for(let mutation of mutationsList) {
-        if (mutation.type === 'childList') {
+        if (mutation.type === 'childList' || mutation.type === 'characterData') {
           replaceMachineNames();
         }
       }
     };
   
     const observer = new MutationObserver(callback);
-  
     observer.observe(targetNode, config);
   }
   
-  replaceMachineNames();
+  function init() {
+    replaceMachineNames();
+    setupMutationObserver();
+  }
   
-  setupMutationObserver();
+  init();
   
   chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.machineNames) {
       replaceMachineNames();
     }
   });
+  
+  window.addEventListener('popstate', replaceMachineNames);
