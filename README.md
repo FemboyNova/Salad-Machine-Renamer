@@ -1,4 +1,5 @@
 🥗 Salad Machine Renamer
+
 📌 Overview
 Easily customize and personalize machine names on Salad.com's earn page, making it simpler to track and identify your machines.
 ✨ Features
