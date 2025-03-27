@@ -6,9 +6,14 @@
     "permissions": [
       "storage"
     ],
+    "host_permissions": [
+      "https://salad.com/earn*"
+    ],
     "content_scripts": [
       {
-        "matches": ["https://salad.com/earn*"],
+        "matches": [
+          "https://salad.com/earn*"
+        ],
         "js": ["content.js"]
       }
     ],
