@@ -4,8 +4,7 @@
     "version": "1.0",
     "description": "Customize machine names on Salad.com",
     "permissions": [
-      "storage",
-      "activeTab"
+      "storage"
     ],
     "content_scripts": [
       {
