@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Salad Machine Name Customizer</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      width: 320px;
+      background-color: #0A2133;
+      color: #B2D530;
+      font-family: 'Arial', sans-serif;
+      padding: 15px;
+    }
+    .container {
+      background-color: #122641;
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    h3 {
+      color: #B2D530;
+      text-align: center;
+      margin-bottom: 15px;
+      font-size: 16px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    #machineList {
+      margin-bottom: 10px;
+    }
+    .machine-entry {
+      display: flex;
+      margin-bottom: 8px;
+      align-items: center;
+    }
+    .machine-entry input {
+      width: 0;
+      flex-grow: 1;
+      margin-right: 5px;
+      padding: 6px;
+      background-color: #0A2133;
+      border: 1px solid #B2D530;
+      color: #B2D530;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+    .machine-entry .machineId,
+    .machine-entry .customName {
+      color: #B2D530;
+    }
+    .removeMachine, #addMachine, #saveButton {
+      background-color: #53A626;
+      color: #0A2133;
+      border: none;
+      padding: 6px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      line-height: 1;
+      transition: opacity 0.3s ease;
+    }
+    #addMachine, #saveButton {
+      width: 100%;
+      margin-bottom: 8px;
+    }
+    .removeMachine:hover,
+    #addMachine:hover,
+    #saveButton:hover {
+      opacity: 0.8;
+    }
+    #status {
+      text-align: center;
+      margin-top: 8px;
+      color: #B2D530;
+      height: 20px;
+      font-size: 12px;
+    }
+    ::placeholder {
+      color: #B2D530;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h3>Salad Machine Name Customizer</h3>
+    <div id="machineList">
+      <div class="machine-entry">
+        <input type="text" class="machineId" placeholder="Machine ID">
+        <input type="text" class="customName" placeholder="Custom Name">
+        <button class="removeMachine">-</button>
+      </div>
+    </div>
+    <button id="addMachine">+ Add Machine</button>
+    <button id="saveButton">Save Custom Names</button>
+    <div id="status"></div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
