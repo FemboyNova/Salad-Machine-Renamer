@@ -1,13 +1,14 @@
 {
     "manifest_version": 3,
     "name": "Salad Machine Renamer",
-    "version": "1.0",
+    "version": "1.1",
     "description": "Customize machine names on Salad.com",
     "permissions": [
       "storage"
     ],
     "host_permissions": [
-      "https://salad.com/earn*"
+      "https://salad.com/earn*",
+      "https://app-api.salad.com/api/v2/demand-monitor/gpu"
     ],
     "content_scripts": [
       {

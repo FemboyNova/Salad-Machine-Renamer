@@ -1,104 +1,89 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Salad Machine Name Customizer</title>
+  <meta charset="UTF-8" />
+  <title>Salad Machine Renamer</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    /* Base font stack similar to your site */
     body {
-      width: 320px;
-      background-color: #0A2133;
-      color: #B2D530;
-      font-family: 'Arial', sans-serif;
-      padding: 15px;
+      font-family: Mallory, BlinkMacSystemFont, -apple-system, "Work Sans", "Segoe UI",
+        "Fira Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      background-color: #0A2133; /* Dark navy background matching your site's bg */
+      color: rgb(219, 241, 193); /* Light green text for readability and branding */
+      padding: 16px;
+      margin: 0;
+      min-width: 320px;
     }
-    .container {
-      background-color: #122641;
-      border-radius: 8px;
-      padding: 15px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    }
+
     h3 {
-      color: #B2D530;
-      text-align: center;
-      margin-bottom: 15px;
-      font-size: 16px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+      font-weight: 700;
+      font-size: 18px;
+      margin-bottom: 12px;
+      color: rgb(219, 241, 193);
+      border-bottom: 1px solid rgb(219, 241, 193);
+      padding-bottom: 6px;
     }
+
     #machineList {
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
+
     .machine-entry {
+      margin-bottom: 10px;
       display: flex;
-      margin-bottom: 8px;
+      gap: 8px;
       align-items: center;
     }
-    .machine-entry input {
-      width: 0;
-      flex-grow: 1;
-      margin-right: 5px;
-      padding: 6px;
-      background-color: #0A2133;
-      border: 1px solid #B2D530;
-      color: #B2D530;
-      border-radius: 4px;
-      font-size: 12px;
-    }
-    .machine-entry .machineId,
-    .machine-entry .customName {
-      color: #B2D530;
-    }
-    .removeMachine, #addMachine, #saveButton {
-      background-color: #53A626;
-      color: #0A2133;
-      border: none;
+
+    input, select {
       padding: 6px 8px;
+      border: none;
       border-radius: 4px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #0A2133;
+      background-color: rgb(219, 241, 193);
+      flex-grow: 1;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: rgb(219, 241, 193);
+      border: none;
+      border-radius: 4px;
+      padding: 8px 14px;
+      font-weight: 700;
+      color: #0A2133;
       cursor: pointer;
-      font-size: 12px;
-      line-height: 1;
-      transition: opacity 0.3s ease;
+      transition: background-color 0.2s ease;
+      user-select: none;
     }
-    #addMachine, #saveButton {
-      width: 100%;
-      margin-bottom: 8px;
+
+    button:hover:not(:disabled) {
+      background-color: #d0e4ab;
     }
-    .removeMachine:hover,
-    #addMachine:hover,
-    #saveButton:hover {
-      opacity: 0.8;
+
+    button:disabled {
+      background-color: rgba(219, 241, 193, 0.5);
+      cursor: default;
     }
+
     #status {
-      text-align: center;
-      margin-top: 8px;
-      color: #B2D530;
-      height: 20px;
-      font-size: 12px;
-    }
-    ::placeholder {
-      color: #B2D530;
-      opacity: 0.7;
+      margin-top: 14px;
+      min-height: 18px;
+      font-style: italic;
+      font-size: 13px;
+      color: rgb(180, 210, 160);
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h3>Salad Machine Name Customizer</h3>
-    <div id="machineList">
-      <div class="machine-entry">
-        <input type="text" class="machineId" placeholder="Machine ID">
-        <input type="text" class="customName" placeholder="Custom Name">
-        <button class="removeMachine">-</button>
-      </div>
-    </div>
-    <button id="addMachine">+ Add Machine</button>
-    <button id="saveButton">Save Custom Names</button>
-    <div id="status"></div>
-  </div>
+  <h3>Manage Machines</h3>
+  <div id="machineList"></div>
+  <button id="addMachine">Add Machine</button>
+  <button id="saveButton">Save</button>
+  <div id="status"></div>
+
   <script src="popup.js"></script>
 </body>
 </html>
