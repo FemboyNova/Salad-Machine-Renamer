@@ -213,7 +213,7 @@ function addLegendBelowTable() {
     legend.style.overflowWrap = 'break-word';
 
     legend.innerHTML = `
-      <strong>Note:</strong> These columns - <em>GPU Demand Tier/Util %</em>, <em>Avg Earning Rate</em>, and <em>Top 25% Earning Rate</em> - show overall GPU demand information.<br>
+      <strong>Note:</strong> These columns - <em>GPU Demand Tier/Util %</em>, <em>Avg Earning Rate</em>, and <em>Top 25% Earning Rate</em> - show the chosen GPU's demand information.<br>
       They <strong>do not</strong> represent the exact earnings of your machine.
     `;
 
