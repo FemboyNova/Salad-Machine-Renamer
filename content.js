@@ -270,11 +270,20 @@ function updateMachineElements() {
   if (!machineNames.length || !gpuDemandData) return;
 
   const machineIdSelector = '.css-15d7bl7.ei767vo0';
-  document.querySelectorAll(machineIdSelector).forEach(el => {
-    const originalMachineId = el.textContent.trim();
-    const matchingMachine = machineNames.find(m => m.machineId.toLowerCase() === originalMachineId.toLowerCase());
 
-    if (matchingMachine) {
+  document.querySelectorAll(machineIdSelector).forEach(el => {
+    const currentText = el.textContent.trim();
+
+    const matchingMachine = machineNames.find(m =>
+      m.machineId.toLowerCase() === currentText.toLowerCase()
+    );
+
+    // Only replace if the text is exactly the original machine ID
+    // and not already the custom name
+    if (
+      matchingMachine &&
+      currentText.toLowerCase() === matchingMachine.machineId.toLowerCase()
+    ) {
       el.textContent = matchingMachine.customName;
       el.setAttribute('data-custom-name', 'true');
     }
@@ -283,10 +292,57 @@ function updateMachineElements() {
   addColumnsToExistingTable();
   addLegendBelowTable();
 
-  replaceMachineIdsInTextNodes();
-
-  // Removed addDemandWarningInline call
+  // Prevent recursive replacement in text nodes
+  replaceMachineIdsInTextNodesSafe();
 }
+
+// Safer text node replacement
+function replaceMachineIdsInTextNodesSafe() {
+  if (!machineNames.length) return;
+
+  const machineMap = {};
+  machineNames.forEach(m => {
+    machineMap[m.machineId.toLowerCase()] = m.customName;
+  });
+
+  const walker = document.createTreeWalker(
+    document.body,
+    NodeFilter.SHOW_TEXT,
+    {
+      acceptNode(node) {
+        if (
+          node.parentNode &&
+          ['SCRIPT', 'STYLE', 'TEXTAREA', 'INPUT'].includes(node.parentNode.nodeName)
+        ) {
+          return NodeFilter.FILTER_REJECT;
+        }
+        const text = node.textContent.toLowerCase();
+
+        for (const id in machineMap) {
+          // Skip if already contains the custom name
+          if (text.includes(id) && !text.includes(machineMap[id].toLowerCase())) {
+            return NodeFilter.FILTER_ACCEPT;
+          }
+        }
+        return NodeFilter.FILTER_REJECT;
+      }
+    },
+    false
+  );
+
+  let node;
+  while ((node = walker.nextNode())) {
+    let text = node.textContent;
+    for (const id in machineMap) {
+      const regex = new RegExp(`\\b${id}\\b`, 'gi');
+      text = text.replace(regex, machineMap[id]);
+    }
+    if (text !== node.textContent) {
+      node.textContent = text;
+    }
+  }
+}
+
 async function init() {
   injectTableStylesAndResize();
 
@@ -323,6 +379,43 @@ chrome.runtime.onMessage.addListener((message) => {
     } else {
       updateMachineElements();
     }
+  }
+});
+
+// Show update banner once per extension update
+chrome.storage.local.get('showReleaseNotes', data => {
+  if (data.showReleaseNotes) {
+    const banner = document.createElement('div');
+    banner.textContent = 'Salad Machine Renamer Extension updated! Check the release notes in the Extension.';
+    banner.style.position = 'fixed';
+    banner.style.top = '0';
+    banner.style.left = '0';
+    banner.style.right = '0';
+    banner.style.backgroundColor = 'rgb(219, 241, 193)';
+    banner.style.color = '#0A2133';
+    banner.style.fontWeight = '700';
+    banner.style.fontFamily = 'Mallory, BlinkMacSystemFont, -apple-system, "Work Sans", "Segoe UI", "Fira Sans", "Helvetica Neue", Helvetica, Arial, sans-serif';
+    banner.style.textAlign = 'center';
+    banner.style.padding = '10px';
+    banner.style.zIndex = '9999';
+
+    const closeBtn = document.createElement('button');
+    closeBtn.textContent = '×';
+    closeBtn.style.marginLeft = '10px';
+    closeBtn.style.background = 'none';
+    closeBtn.style.border = 'none';
+    closeBtn.style.fontSize = '20px';
+    closeBtn.style.cursor = 'pointer';
+    closeBtn.style.color = '#0A2133';
+    closeBtn.style.fontWeight = '700';
+
+    closeBtn.onclick = () => banner.remove();
+
+    banner.appendChild(closeBtn);
+    document.body.appendChild(banner);
+
+    // Clear flag so banner shows only once
+    chrome.storage.local.set({ showReleaseNotes: false });
   }
 });
 

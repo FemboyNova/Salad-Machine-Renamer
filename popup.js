@@ -3,11 +3,53 @@ document.addEventListener('DOMContentLoaded', function() {
   const addMachineButton = document.getElementById('addMachine');
   const saveButton = document.getElementById('saveButton');
   const statusDiv = document.getElementById('status');
+  const helpButton = document.getElementById('helpButton');
+
+  // Release notes elements
+  const releaseNotesDiv = document.getElementById('releaseNotes');
+  const releaseNotesList = document.getElementById('releaseNotesList');
+  const closeReleaseNotes = document.getElementById('closeReleaseNotes');
 
   let gpuData = [];
 
   // Disable save until machines loaded
   saveButton.disabled = true;
+
+  // ---- Release Notes Setup ----
+  const RELEASE_NOTES = {
+
+    "1.2.0": [
+      " 1.1: ReWorked the detection of machine id's",
+      " 1.1: Added Gpu demand to the machine Table",
+      " 1.2: Added Get Help / Report Bug button linking to Discord Server.",
+      " 1.2: Fixed Bugs (Looping name change)"
+    ]
+    
+  };
+
+  chrome.management.getSelf(extInfo => {
+    const currentVersion = extInfo.version;
+
+    chrome.storage.local.get(['lastSeenVersion'], result => {
+      if (result.lastSeenVersion !== currentVersion) {
+        if (RELEASE_NOTES[currentVersion]) {
+          releaseNotesList.innerHTML = '';
+          RELEASE_NOTES[currentVersion].forEach(note => {
+            const li = document.createElement('li');
+            li.textContent = note;
+            releaseNotesList.appendChild(li);
+          });
+          releaseNotesDiv.style.display = 'block';
+        }
+        chrome.storage.local.set({ lastSeenVersion: currentVersion });
+      }
+    });
+  });
+
+  closeReleaseNotes.addEventListener('click', () => {
+    releaseNotesDiv.style.display = 'none';
+  });
+  // ---- End Release Notes Setup ----
 
   // Fetch GPU demand data once on popup load
   fetch('https://app-api.salad.com/api/v2/demand-monitor/gpu')
@@ -41,7 +83,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const entry = document.createElement('div');
     entry.className = 'machine-entry';
 
-    // Create inputs
     const machineIdInput = document.createElement('input');
     machineIdInput.type = 'text';
     machineIdInput.className = 'machineId';
@@ -57,13 +98,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const gpuSelect = document.createElement('select');
     gpuSelect.className = 'gpuSelect';
 
-    // Loading option first
     const loadingOption = document.createElement('option');
     loadingOption.value = '';
     loadingOption.textContent = 'Loading GPUs...';
     gpuSelect.appendChild(loadingOption);
 
-    // Fill GPU options after gpuData loaded
     if (gpuData.length > 0) {
       gpuSelect.innerHTML = '<option value="">Select GPU</option>';
       gpuData.forEach(({ name, displayName }) => {
@@ -88,7 +127,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     machineList.appendChild(entry);
 
-    // Clear status message on input
     [machineIdInput, customNameInput, gpuSelect].forEach(el =>
       el.addEventListener('input', () => {
         statusDiv.textContent = '';
@@ -96,7 +134,6 @@ document.addEventListener('DOMContentLoaded', function() {
     );
   }
 
-  // Event delegation for remove buttons
   machineList.addEventListener('click', function(e) {
     if (e.target.classList.contains('removeMachine')) {
       if (machineList.children.length > 1) {
@@ -156,5 +193,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 2500);
       }
     });
+  });
+
+  // Help / Report Bug button click
+  helpButton.addEventListener('click', function() {
+    chrome.tabs.create({ url: 'https://discord.gg/TyD5HsUkUZ' });
   });
 });
