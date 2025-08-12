@@ -18,11 +18,12 @@ document.addEventListener('DOMContentLoaded', function() {
   // ---- Release Notes Setup ----
   const RELEASE_NOTES = {
 
-    "1.2.0": [
+    "1.3.0": [
       " 1.1: ReWorked the detection of machine id's",
       " 1.1: Added Gpu demand to the machine Table",
       " 1.2: Added Get Help / Report Bug button linking to Discord Server.",
-      " 1.2: Fixed Bugs (Looping name change)"
+      " 1.2: Fixed Bugs (Looping name change)",
+      " 1.3: Added historic earnings & lifetime earnings to machines table."
     ]
     
   };
