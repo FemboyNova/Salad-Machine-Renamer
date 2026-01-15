@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Salad Machine Renamer</title>
+  <style>
+    /* Base font stack similar to salad site */
+    body {
+      font-family: Mallory, BlinkMacSystemFont, -apple-system, "Work Sans", "Segoe UI",
+        "Fira Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      background-color: #0A2133; 
+      color: rgb(219, 241, 193); 
+      padding: 16px;
+      margin: 0;
+      min-width: 320px;
+    }
+
+    h3 {
+      font-weight: 700;
+      font-size: 18px;
+      margin-bottom: 12px;
+      color: rgb(219, 241, 193);
+      border-bottom: 1px solid rgb(219, 241, 193);
+      padding-bottom: 6px;
+    }
+
+    #machineList {
+      margin-bottom: 12px;
+    }
+
+    .machine-entry {
+      margin-bottom: 10px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    input, select {
+      padding: 6px 8px;
+      border: none;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #0A2133;
+      background-color: rgb(219, 241, 193);
+      flex-grow: 1;
+      box-sizing: border-box;
+    }
+
+    /* Container for the buttons to align horizontally */
+    #buttonContainer {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+      justify-content: center; 
+    }
+
+    button {
+      background-color: rgb(219, 241, 193);
+      border: none;
+      border-radius: 4px;
+      padding: 10px 18px;
+      font-weight: 700;
+      color: #0A2133;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      user-select: none;
+      flex-grow: 1;
+      max-width: 180px;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    button:hover:not(:disabled) {
+      background-color: #d0e4ab;
+    }
+
+    button:disabled {
+      background-color: rgba(219, 241, 193, 0.5);
+      cursor: default;
+    }
+
+    /* Specific styling for the Buy Me a Coffee button */
+    #supportButton {
+      padding: 8px 12px;
+      max-width: 160px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex-grow: 0;
+    }
+
+    #status {
+      margin-top: 14px;
+      min-height: 18px;
+      font-style: italic;
+      font-size: 13px;
+      color: rgb(180, 210, 160);
+    }
+    
+    #releaseNotes {
+      display: none;
+      margin-top: 12px;
+      padding: 10px;
+      background-color: rgba(219, 241, 193, 0.1);
+      border: 1px solid rgb(219, 241, 193);
+      border-radius: 4px;
+    }
+
+    #releaseNotesList {
+      margin: 6px 0 0 16px;
+      padding: 0;
+      font-size: 13px;
+    }
+
+    #closeReleaseNotes {
+      margin-top: 6px;
+      padding: 4px 8px;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <h3>Manage Machines</h3>
+  <div id="machineList"></div>
+
+  <div id="buttonContainer">
+    <button id="autoDetectButton">🔍 Auto-Detect</button>
+    <button id="addMachine">Add Machine</button>
+    <button id="saveButton">Save</button>
+    <button id="helpButton">Get Help / Report Bug</button>
+    <button id="supportButton">☕ Buy Me a Coffee</button>
+  </div>
+
+  <div id="releaseNotes">
+    <strong>What's New:</strong>
+    <ul id="releaseNotesList"></ul>
+    <button id="closeReleaseNotes">Close</button>
+  </div>
+
+  <div id="status"></div>
+
+  <script src="browser-api.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
